@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xqh.tww.tkmybatis.mapper.TwwOrderPayMapper" >
+  <resultMap id="BaseResultMap" type="com.xqh.tww.tkmybatis.entity.TwwOrderPay" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="pay_no" property="payNo" jdbcType="CHAR" />
+    <result column="pay_user_id" property="payUserId" jdbcType="BIGINT" />
+    <result column="pay_user_name" property="payUserName" jdbcType="CHAR" />
+    <result column="pay_user_avatar" property="payUserAvatar" jdbcType="VARCHAR" />
+    <result column="pay_amount" property="payAmount" jdbcType="BIGINT" />
+    <result column="pay_status" property="payStatus" jdbcType="TINYINT" />
+    <result column="user_id" property="userId" jdbcType="BIGINT" />
+    <result column="order_id" property="orderId" jdbcType="BIGINT" />
+    <result column="order_no" property="orderNo" jdbcType="CHAR" />
+    <result column="doll_id" property="dollId" jdbcType="BIGINT" />
+    <result column="doll_name" property="dollName" jdbcType="CHAR" />
+    <result column="create_time" property="createTime" jdbcType="BIGINT" />
+    <result column="update_time" property="updateTime" jdbcType="BIGINT" />
+  </resultMap>
+</mapper>

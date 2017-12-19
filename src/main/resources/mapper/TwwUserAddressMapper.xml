@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xqh.tww.tkmybatis.mapper.TwwUserAddressMapper" >
+  <resultMap id="BaseResultMap" type="com.xqh.tww.tkmybatis.entity.TwwUserAddress" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="user_id" property="userId" jdbcType="BIGINT" />
+    <result column="consignee_name" property="consigneeName" jdbcType="CHAR" />
+    <result column="consignee_phone" property="consigneePhone" jdbcType="CHAR" />
+    <result column="province_id" property="provinceId" jdbcType="INTEGER" />
+    <result column="province_name" property="provinceName" jdbcType="CHAR" />
+    <result column="city_id" property="cityId" jdbcType="INTEGER" />
+    <result column="city_name" property="cityName" jdbcType="CHAR" />
+    <result column="county_id" property="countyId" jdbcType="INTEGER" />
+    <result column="county_name" property="countyName" jdbcType="CHAR" />
+    <result column="detail_address" property="detailAddress" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="BIGINT" />
+    <result column="update_time" property="updateTime" jdbcType="BIGINT" />
+  </resultMap>
+</mapper>

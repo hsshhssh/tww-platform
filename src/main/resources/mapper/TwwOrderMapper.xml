@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xqh.tww.tkmybatis.mapper.TwwOrderMapper" >
+  <resultMap id="BaseResultMap" type="com.xqh.tww.tkmybatis.entity.TwwOrder" >
+    <!--
+      WARNING - @mbggenerated
+    -->
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="order_no" property="orderNo" jdbcType="CHAR" />
+    <result column="user_id" property="userId" jdbcType="BIGINT" />
+    <result column="doll_id" property="dollId" jdbcType="BIGINT" />
+    <result column="doll_name" property="dollName" jdbcType="CHAR" />
+    <result column="doll_amount" property="dollAmount" jdbcType="BIGINT" />
+    <result column="doll_image" property="dollImage" jdbcType="VARCHAR" />
+    <result column="current_amount" property="currentAmount" jdbcType="BIGINT" />
+    <result column="status" property="status" jdbcType="TINYINT" />
+    <result column="create_time" property="createTime" jdbcType="BIGINT" />
+    <result column="update_time" property="updateTime" jdbcType="BIGINT" />
+  </resultMap>
+</mapper>
