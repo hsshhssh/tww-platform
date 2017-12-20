@@ -1,7 +1,17 @@
 package com.xqh.tww.controller.api;
 
+import com.xqh.tww.entity.dto.TwwOrderInsertDTO;
+import com.xqh.tww.entity.vo.TwwOrderVO;
+import com.xqh.tww.utils.common.PageResult;
+import com.xqh.tww.utils.common.Search;
 import io.swagger.annotations.Api;
-import org.springframework.web.bind.annotation.RequestMapping;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 /**
  * Created by hssh on 2017/12/19.
@@ -10,4 +20,25 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/xqh/wawa/tww/order")
 public interface IOrderController
 {
+    @ApiOperation("订单列表接口")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "search", value = "高级查询对象", required = true, dataType = "Map"),
+            @ApiImplicitParam(name = "page", value = "页码", defaultValue = "1", dataType = "Integer"),
+            @ApiImplicitParam(name = "size", value = "每页条数", defaultValue = "10", dataType = "Integer")
+    })
+    @GetMapping("list")
+    public PageResult<TwwOrderVO> list(@RequestParam("search") @Valid @NotNull Search search,
+                                       @RequestParam(value = "page", defaultValue = "1")  int page,
+                                       @RequestParam(value = "size", defaultValue = "10") int size);
+
+    @ApiOperation("创建订单接口")
+    @ApiImplicitParam(name = "dto", value = "创建订单实体类", required = true, dataType = "TwwOrderInsertDTO")
+    @PutMapping
+    public long insertOrder(@RequestBody @Valid @NotNull TwwOrderInsertDTO dto);
+
+
+    @ApiOperation("订单详情接口")
+    @ApiImplicitParam(name = "id", value = "订单id", required = true, dataType = "Long")
+    @GetMapping
+    public TwwOrderVO get(@RequestParam("id") long id);
 }
