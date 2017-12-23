@@ -62,7 +62,7 @@ public class WxController
             //wxUserInfo = WXOauth2.wxUserInfo(wxAuthorizationCode.getAccess_token(), wxAuthorizationCode.getOpenid());
 
             logger.info("openId信息: {}", JSONObject.toJSON(wxAuthorizationCode));
-            logger.info("用户信息：{}", JSONObject.toJSON((wxUserInfo));
+            logger.info("用户信息：{}", JSONObject.toJSON((wxUserInfo)));
         } catch (InterruptedException e)
         {
             logger.error("获取openId失败 {}", e);
