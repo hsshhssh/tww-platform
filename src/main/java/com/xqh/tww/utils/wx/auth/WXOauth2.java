@@ -4,6 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 
 /**
@@ -74,7 +75,7 @@ public class WXOauth2 {
 
 		String accessTokenUrl = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=%s&openid=%s&lang=zh_CN";
 		accessTokenUrl = String.format(accessTokenUrl, accessToken, openid);
-
+		System.out.println("################userInfoUrl:" + accessTokenUrl);
 		System.out.println("#####################################1:" + accessToken);
 		String jsonStr = HttpKit.get(accessTokenUrl);
 
