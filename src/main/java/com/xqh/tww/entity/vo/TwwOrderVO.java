@@ -8,4 +8,15 @@ import lombok.Data;
 @Data
 public class TwwOrderVO
 {
+    private Long id;
+    private String orderNo;
+    private Long userId;
+    private Long dollId;
+    private String dollName;
+    private Long dollAmount;
+    private String dollImage;
+    private Long currentAmount;
+    private Integer status;
+    private Long createTime;
+    private Long updateTime;
 }

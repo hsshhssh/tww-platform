@@ -96,6 +96,20 @@ public class CommonUtils
         }
     }
 
+    /**
+     * 参数校验失败 指定错误信息
+     */
+    public static void sendArgeValidErrorMessage(HttpServletResponse resp, String message)
+    {
+        try
+        {
+            resp.sendError(ErrorResponseEunm.INVALID_METHOD_ARGS.status, message);
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+    }
 
     /**
      * md5加密

@@ -8,4 +8,13 @@ import lombok.Data;
 @Data
 public class TwwDollVO
 {
+    private Long id;
+    private String name;
+    private Long amount;
+    private String image;
+    private Integer status;
+    private Long createTime;
+    private Long updateTime;
+    private String detail;
+
 }
