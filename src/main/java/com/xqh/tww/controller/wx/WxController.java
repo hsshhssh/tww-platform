@@ -5,6 +5,7 @@ import com.google.common.base.Throwables;
 import com.xqh.tww.utils.common.CommonUtils;
 import com.xqh.tww.utils.wx.auth.WXAuthorizationCode;
 import com.xqh.tww.utils.wx.auth.WXOauth2;
+import com.xqh.tww.utils.wx.auth.WXUserInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,6 +28,8 @@ public class WxController
     @GetMapping("getOpenId")
     public void getOpenInit(HttpServletRequest req, HttpServletResponse resp)
     {
+        logger.info("进入getOpenId.......");
+
         try
         {
             String redirectUrl = URLEncoder.encode("http://wawa.uerbx.com/xqh/wawa/tww/wx/getCode", "utf8");
@@ -50,15 +53,19 @@ public class WxController
         String code = params.get("code");
 
         WXAuthorizationCode wxAuthorizationCode = null;
+        WXUserInfo wxUserInfo = null;
         try
         {
             wxAuthorizationCode = WXOauth2.wxOpenid(code);
+            wxUserInfo = WXOauth2.wxUserInfo(wxAuthorizationCode.getAccess_token(), wxAuthorizationCode.getOpenid());
+
+            logger.info("openId信息: {}", wxAuthorizationCode);
+            logger.info("用户信息：{}", wxUserInfo);
         } catch (InterruptedException e)
         {
             logger.error("获取openId失败 {}", e);
         }
-
-        CommonUtils.writeResponse(resp, JSONObject.toJSON(wxAuthorizationCode));
+        CommonUtils.writeResponse(resp, JSONObject.toJSON(wxUserInfo));
         return;
     }
 
