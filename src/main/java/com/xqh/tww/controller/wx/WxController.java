@@ -59,7 +59,7 @@ public class WxController
         try
         {
             wxAuthorizationCode = WXOauth2.wxOpenid(code);
-            //wxUserInfo = WXOauth2.wxUserInfo(wxAuthorizationCode.getAccess_token(), wxAuthorizationCode.getOpenid());
+            wxUserInfo = WXOauth2.wxUserInfo(wxAuthorizationCode.getAccess_token(), wxAuthorizationCode.getOpenid());
 
             logger.info("openId信息: {}", JSONObject.toJSON(wxAuthorizationCode));
             logger.info("用户信息：{}", JSONObject.toJSON((wxUserInfo)));
