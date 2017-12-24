@@ -3,6 +3,6 @@
     <mchId>1494876292</mchId>
     <appId>wxb9e4c630ffe272e7</appId>
     <key>zhuawawa233EWq3esfh54FfffwSDADDD</key>
-    <certPath>C:\Users\34673\Desktop\apiclient_cert.p12</certPath>
+    <certPath>/tmp/apiclient_cert.p12</certPath>
     <certPassword>1494876292</certPassword>
 </body>

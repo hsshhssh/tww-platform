@@ -1,8 +1,10 @@
 package com.xqh.tww.service;
 
+import com.riversoft.weixin.pay.base.PaySetting;
 import com.riversoft.weixin.pay.payment.Payments;
 import com.riversoft.weixin.pay.payment.bean.UnifiedOrderRequest;
 import com.riversoft.weixin.pay.payment.bean.UnifiedOrderResponse;
+import com.riversoft.weixin.pay.util.SignatureUtil;
 import com.xqh.tww.entity.dto.PayOrderDTO;
 import com.xqh.tww.tkmybatis.entity.TwwDoll;
 import com.xqh.tww.tkmybatis.entity.TwwOrder;
@@ -11,6 +13,7 @@ import com.xqh.tww.tkmybatis.entity.TwwUser;
 import com.xqh.tww.tkmybatis.mapper.TwwOrderMapper;
 import com.xqh.tww.tkmybatis.mapper.TwwOrderPayMapper;
 import com.xqh.tww.utils.NoUtils;
+import com.xqh.tww.utils.common.CommonUtils;
 import com.xqh.tww.utils.common.ExampleBuilder;
 import com.xqh.tww.utils.common.Search;
 import com.xqh.tww.utils.config.CommonConfig;
@@ -25,6 +28,8 @@ import tk.mybatis.mapper.entity.Example;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * Created by hssh on 2017/12/24.
@@ -83,6 +88,19 @@ public class PayService
 
         return response;
     }
+
+    public Map<String, Object> getPayOrderMap(UnifiedOrderResponse payInfo)
+    {
+        Map<String, Object> map = new TreeMap<>();
+        map.put("appId", commonConfig.getAppId().trim());
+        map.put("timeStamp", String.valueOf(System.currentTimeMillis()/1000));
+        map.put("nonceStr", CommonUtils.generateRandom(20));
+        map.put("package", "prepay_id=" + payInfo.getPrepayId());
+        map.put("signType", "MD5");
+        map.put("paySign", SignatureUtil.sign(map, commonConfig.getKey().trim()));
+        return map;
+    }
+
 
     @Transactional
     public void dealNotify(String payNo, String wxOrderNo)

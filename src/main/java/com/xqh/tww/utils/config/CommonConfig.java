@@ -14,14 +14,14 @@ public class CommonConfig
     @Value(path = "/config/zkconf/wawa_tww.conf", key = "host")
     private String host;
 
-    @Value(path = "/config/zkconf/wawa_tww.conf", key = "payKey")
-    private String payKey;
+    @Value(path = "/config/zkconf/wawa_tww.conf", key = "mchId")
+    private String mchId;
 
-    @Value(path = "/config/zkconf/wawa_tww.conf", key = "payUserId")
-    private String payUserId;
+    @Value(path = "/config/zkconf/wawa_tww.conf", key = "appId")
+    private String appId;
 
-    @Value(path = "/config/zkconf/wawa_tww.conf", key = "payAppId")
-    private String payAppId;
+    @Value(path = "/config/zkconf/wawa_tww.conf", key = "key")
+    private String key;
 
 
 }

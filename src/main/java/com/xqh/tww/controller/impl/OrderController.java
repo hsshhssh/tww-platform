@@ -35,6 +35,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.Arrays;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -115,9 +116,9 @@ public class OrderController implements IOrderController
     }
 
     @Override
-    public UnifiedOrderResponse payOrder(@RequestBody @Valid @NotNull PayOrderDTO dto,
-                                         HttpServletRequest req,
-                                         HttpServletResponse resp)
+    public Map<String, Object> payOrder(@RequestBody @Valid @NotNull PayOrderDTO dto,
+                                        HttpServletRequest req,
+                                        HttpServletResponse resp)
     {
         // 检验参数
         TwwOrder order = orderMapper.selectByPrimaryKey(dto.getOrderId());
@@ -147,7 +148,8 @@ public class OrderController implements IOrderController
         }
 
         // 返回
-        return payService.getPayInfo(doll, user, pay, CommonUtils.getIp(req));
+        UnifiedOrderResponse payInfo = payService.getPayInfo(doll, user, pay, CommonUtils.getIp(req));
+        return payService.getPayOrderMap(payInfo);
     }
 
     @Override
