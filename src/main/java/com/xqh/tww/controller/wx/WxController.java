@@ -2,6 +2,9 @@ package com.xqh.tww.controller.wx;
 
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.base.Throwables;
+import com.riversoft.weixin.pay.payment.Payments;
+import com.riversoft.weixin.pay.payment.bean.UnifiedOrderRequest;
+import com.riversoft.weixin.pay.payment.bean.UnifiedOrderResponse;
 import com.xqh.tww.entity.vo.TwwUserVO;
 import com.xqh.tww.service.UserService;
 import com.xqh.tww.tkmybatis.entity.TwwUser;
@@ -12,19 +15,30 @@ import com.xqh.tww.utils.config.CommonConfig;
 import com.xqh.tww.utils.wx.auth.WXAuthorizationCode;
 import com.xqh.tww.utils.wx.auth.WXOauth2;
 import com.xqh.tww.utils.wx.auth.WXUserInfo;
+import com.xqh.tww.utils.wx.notify.*;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.math.BigDecimal;
 import java.net.URLEncoder;
+import java.util.Date;
+import java.util.SortedMap;
 import java.util.TreeMap;
+
+import static com.xqh.tww.utils.wx.notify.NotifyConstant.WX_RESPONSE_FAIL;
+import static com.xqh.tww.utils.wx.notify.NotifyConstant.WX_RESPONSE_SUCCESS;
+
 
 /**
  * Created by hssh on 2017/12/23.
@@ -103,6 +117,96 @@ public class WxController
     public void shareUrl(HttpServletRequest req, HttpServletResponse resp)
     {
         //WechatUtil.setWechatJsConfig2()
+        return ;
+    }
+
+    @GetMapping("/pay")
+    public void pay()
+    {
+        UnifiedOrderRequest unifiedOrderRequest = new UnifiedOrderRequest();
+        unifiedOrderRequest.setBody("牛奶 小号");
+        unifiedOrderRequest.setDetail("小号牛奶 鲜奶");
+        unifiedOrderRequest.setTradeNumber("1292063901201605160012300016");
+        unifiedOrderRequest.setTotalFee(100);
+        unifiedOrderRequest.setBillCreatedIp("192.168.1.103");
+        unifiedOrderRequest.setNotifyUrl("http://gzriver.com/order/pay/notify");
+        unifiedOrderRequest.setTradeType("JSAPI");
+        unifiedOrderRequest.setOpenId("oELhlt7Q-lRmLbRsPsaKeVX6pqjg");
+
+        UnifiedOrderResponse response = Payments.defaultPayments().unifiedOrder(unifiedOrderRequest);
+        logger.info("pay response:{}", response);
+    }
+
+    @PostMapping("/pay/callback")
+    public void payCallback(HttpServletRequest request, HttpServletResponse response) throws IOException
+    {
+        String notifyXml = getRequestBody(request);
+
+        if(logger.isInfoEnabled()) {
+            logger.info("received WeChat notify,notify context is {}", notifyXml);
+        }
+
+        PrintWriter out = response.getWriter();
+
+        Trade payResult = buildPayResult(notifyXml);
+
+        if(payResult == null){
+            out.write(NotifyConstant.WX_RESPONSE_FAIL);
+        } else {
+            //payResult.setSource(1);
+            //ResultModel processResult = processorManager.process(payResult);
+            logger.info("微信公众号支付回调结果：{}", JSONObject.toJSON(payResult));
+
+            payResult.setTradeStatus(PayTask.STATUS_SUCCESS);
+            if(payResult.getTradeStatus()== PayTask.STATUS_SUCCESS){
+                out.write(WX_RESPONSE_SUCCESS);
+            }else {
+                out.write(WX_RESPONSE_FAIL);
+            }
+        }
+
+        out.flush();
+        out.close();
+    }
+
+    private Trade buildPayResult(String notifyXml){
+
+        SortedMap<String,String> map = XmlHelper.parseXmlToMap(notifyXml);
+        if( map == null ){
+            logger.warn("can not parse the notify params,the notify xml={}", notifyXml);
+            return null;
+        }
+
+        // TODO 暂时不验签名
+        //String sign = WxPayHelper.createSign(map);
+        //if( !sign.equalsIgnoreCase(map.get("sign")) ){
+        //    LOGGER.warn("check params error,the notify xml is:" + notifyXml+";the sign of mine is:"+sign);
+        //    return null;
+        //}
+
+        Trade payResult = new Trade();
+        payResult.setPayStatus("SUCCESS".equals(map.get("result_code")) ? PayStatus.STATUS_SUCCESS : PayStatus.STATUS_FAIL);
+        payResult.setTradeStatus("SUCCESS".equals(map.get("result_code")) ? PayTask.STATUS_SUCCESS : PayTask.STATUS_FAIL);
+        String totalFeeStr = map.get("total_fee");
+        payResult.setTotalFee(new BigDecimal(totalFeeStr));
+        payResult.setOrderId(map.get("out_trade_no"));
+        payResult.setOutTradeId(map.get("transaction_id"));
+        payResult.setReturnContent(notifyXml);
+        payResult.setResultTime(new Date());
+
+        return payResult;
+    }
+
+    private String getRequestBody(HttpServletRequest request) throws IOException {
+        StringBuilder sb = new StringBuilder();
+        BufferedReader reader = request.getReader();
+        String inputLine = reader.readLine();
+        while (inputLine != null) {
+            sb.append(inputLine);
+            inputLine = reader.readLine();
+        }
+        reader.close();
+        return sb.toString();
     }
 
 }

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<body>
+    <mchId>mchId</mchId>
+    <appId>appId</appId>
+    <key>key</key>
+    <certPath>certPath</certPath>
+    <certPassword>certPassword</certPassword>
+</body>

@@ -68,7 +68,7 @@ public class UserService
         search.put("openId_eq", openId);
         Example example = new ExampleBuilder(TwwUser.class).search(search).build();
         List<TwwUser> users = twwUserMapper.selectByExample(example);
-        return users.get(0);
+        return users.size() > 0 ? users.get(0) : null;
     }
 
 }
