@@ -36,7 +36,7 @@ public class PreventRepeatService
         if(CollectionUtils.isNotEmpty(preventRepeatList))
         {
             logger.info("重复请求 type:{}, repeatFlag:{}", type, repeatFlag);
-            return false;
+            return true;
         }
 
         TwwPreventRepeat preventRepeat = new TwwPreventRepeat();
@@ -48,11 +48,11 @@ public class PreventRepeatService
         } catch (DuplicateKeyException e)
         {
             logger.info("重复请求 type:{}, repeatFlag:{}", type, repeatFlag);
-            return false;
+            return true;
         }
 
         logger.info("无重复请求 type:{}, repeatFlag:{}", type, repeatFlag);
-        return true;
+        return false;
     }
 
     public boolean removeRepeatFlag(int type, String repeatFlag)
