@@ -5,6 +5,7 @@ import com.xqh.tww.entity.dto.RegisterUserDTO;
 import com.xqh.tww.entity.dto.TwwUserAddressInsertDTO;
 import com.xqh.tww.entity.dto.TwwUserAddressUpdateDTO;
 import com.xqh.tww.entity.vo.TwwUserAddressVO;
+import com.xqh.tww.entity.vo.TwwUserVO;
 import com.xqh.tww.service.AddressService;
 import com.xqh.tww.service.UserService;
 import com.xqh.tww.tkmybatis.entity.TwwUser;
@@ -33,11 +34,11 @@ public class UserController implements IUserController
     private TwwUserAddressMapper addressMapper;
 
     @Override
-    public long register(@RequestBody @Valid RegisterUserDTO dto)
+    public TwwUserVO register(@RequestBody @Valid RegisterUserDTO dto)
     {
         TwwUser twwUser = DozerUtils.map(dto, TwwUser.class);
 
-        return userService.insert(twwUser);
+        return DozerUtils.map(userService.insert(twwUser), TwwUserVO.class);
     }
 
     @Override

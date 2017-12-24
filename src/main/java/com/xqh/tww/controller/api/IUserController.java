@@ -4,6 +4,7 @@ import com.xqh.tww.entity.dto.RegisterUserDTO;
 import com.xqh.tww.entity.dto.TwwUserAddressInsertDTO;
 import com.xqh.tww.entity.dto.TwwUserAddressUpdateDTO;
 import com.xqh.tww.entity.vo.TwwUserAddressVO;
+import com.xqh.tww.entity.vo.TwwUserVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
@@ -22,7 +23,7 @@ public interface IUserController
     @ApiOperation("用户注册接口")
     @ApiImplicitParam(name = "dto", value = "用户注册实体类", required = true, dataType = "RegisterUserDTO")
     @PutMapping("register")
-    public long register(@RequestBody @Valid RegisterUserDTO dto);
+    public TwwUserVO register(@RequestBody @Valid RegisterUserDTO dto);
 
     @ApiOperation("获取收货地址")
     @ApiImplicitParam(name = "uid", value = "用户id", required = true, dataType = "Long")
