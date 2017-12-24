@@ -2,8 +2,10 @@ package com.xqh.tww.service;
 
 import com.xqh.tww.tkmybatis.entity.TwwUser;
 import com.xqh.tww.tkmybatis.mapper.TwwUserMapper;
+import com.xqh.tww.utils.common.DozerUtils;
 import com.xqh.tww.utils.common.ExampleBuilder;
 import com.xqh.tww.utils.common.Search;
+import org.apache.commons.beanutils.BeanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DuplicateKeyException;
@@ -24,7 +26,7 @@ public class UserService
     @Resource
     private TwwUserMapper twwUserMapper;
 
-    public long insert(TwwUser twwUser)
+    public TwwUser insert(TwwUser twwUser)
     {
         long nowTime = System.currentTimeMillis();
         twwUser.setCreateTime(nowTime);
@@ -35,11 +37,17 @@ public class UserService
             twwUserMapper.insertSelective(twwUser);
         } catch (DuplicateKeyException e)
         {
-            logger.info("openId:{} 已注册", twwUser.getOpenId());
-            return selectByOpenIdInner(twwUser.getOpenId()).getId();
+            logger.info("openId:{} 已注册 更新信息：{}", twwUser.getOpenId(), twwUser);
+            TwwUser oldTwwUser = selectByOpenIdInner(twwUser.getOpenId());
+            TwwUser newTwwUser = DozerUtils.map(twwUser, TwwUser.class);
+            newTwwUser.setId(oldTwwUser.getId());
+            newTwwUser.setCreateTime(null);
+            twwUserMapper.updateByPrimaryKeySelective(newTwwUser);
+            return newTwwUser;
+
         }
 
-        return twwUser.getId();
+        return twwUser;
     }
 
     private TwwUser selectByOpenIdInner(String openId)

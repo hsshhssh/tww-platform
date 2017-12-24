@@ -5,6 +5,7 @@ package com.xqh.tww.utils.common;
  */
 public enum ErrorResponseEunm
 {
+    ERROR_GET_OPENID(40001, "获取openId失败"),
     INVALID_METHOD_ARGS(40003, "参数校验失败"),
     ;
 
