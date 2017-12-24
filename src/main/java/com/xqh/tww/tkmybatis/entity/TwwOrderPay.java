@@ -81,6 +81,12 @@ public class TwwOrderPay {
     private String dollName;
 
     /**
+     * 第三方支付订单号
+     */
+    @Column(name = "thrid_order_no")
+    private String thridOrderNo;
+
+    /**
      * 创建时间
      */
     @Column(name = "create_time")

@@ -8,6 +8,7 @@ import com.xqh.tww.tkmybatis.entity.TwwUser;
 import com.xqh.tww.utils.common.CommonUtils;
 import com.xqh.tww.utils.common.DozerUtils;
 import com.xqh.tww.utils.common.ErrorResponseEunm;
+import com.xqh.tww.utils.config.CommonConfig;
 import com.xqh.tww.utils.wx.auth.WXAuthorizationCode;
 import com.xqh.tww.utils.wx.auth.WXOauth2;
 import com.xqh.tww.utils.wx.auth.WXUserInfo;
@@ -36,6 +37,8 @@ public class WxController
 
     @Resource
     private UserService userService;
+    @Resource
+    private CommonConfig commonConfig;
 
     @GetMapping("getOpenId")
     public void getOpenInit(HttpServletRequest req, HttpServletResponse resp)
@@ -44,7 +47,7 @@ public class WxController
 
         try
         {
-            String redirectUrl = URLEncoder.encode("http://wawa.uerbx.com/xqh/wawa/tww/wx/getCode", "utf8");
+            String redirectUrl = URLEncoder.encode(commonConfig.getHost().trim() +  "/xqh/wawa/tww/wx/getCode", "utf8");
             String authorizeUrl = WXOauth2.authorize(redirectUrl);
             resp.sendRedirect(authorizeUrl);
         } catch (IOException e)

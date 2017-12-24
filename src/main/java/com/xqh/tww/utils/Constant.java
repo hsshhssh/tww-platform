@@ -7,4 +7,6 @@ public class Constant
 {
     public final static String ERR_MSG = "系统异常";
 
+    public final static String LOGIN_TIMEOUT = "登录超时";
+
 }

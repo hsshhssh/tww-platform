@@ -17,6 +17,7 @@
     <result column="order_no" property="orderNo" jdbcType="CHAR" />
     <result column="doll_id" property="dollId" jdbcType="BIGINT" />
     <result column="doll_name" property="dollName" jdbcType="CHAR" />
+    <result column="thrid_order_no" property="thridOrderNo" jdbcType="CHAR" />
     <result column="create_time" property="createTime" jdbcType="BIGINT" />
     <result column="update_time" property="updateTime" jdbcType="BIGINT" />
   </resultMap>

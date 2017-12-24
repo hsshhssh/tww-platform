@@ -1,6 +1,8 @@
 package com.xqh.tww.controller.api;
 
+import com.xqh.tww.entity.dto.PayOrderDTO;
 import com.xqh.tww.entity.dto.TwwOrderInsertDTO;
+import com.xqh.tww.entity.vo.PayOrderVO;
 import com.xqh.tww.entity.vo.TwwOrderVO;
 import com.xqh.tww.utils.common.PageResult;
 import com.xqh.tww.utils.common.Search;
@@ -10,6 +12,8 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
@@ -26,7 +30,7 @@ public interface IOrderController
             @ApiImplicitParam(name = "page", value = "页码", defaultValue = "1", dataType = "Integer"),
             @ApiImplicitParam(name = "size", value = "每页条数", defaultValue = "10", dataType = "Integer")
     })
-    @GetMapping("list")
+    @PostMapping("list")
     public PageResult<TwwOrderVO> list(@RequestParam("search") @Valid @NotNull Search search,
                                        @RequestParam(value = "page", defaultValue = "1")  int page,
                                        @RequestParam(value = "size", defaultValue = "10") int size);
@@ -34,11 +38,26 @@ public interface IOrderController
     @ApiOperation("创建订单接口")
     @ApiImplicitParam(name = "dto", value = "创建订单实体类", required = true, dataType = "TwwOrderInsertDTO")
     @PutMapping
-    public long insertOrder(@RequestBody @Valid @NotNull TwwOrderInsertDTO dto);
+    public long insertOrder(@RequestBody @Valid @NotNull TwwOrderInsertDTO dto,
+                            HttpServletResponse resp);
 
 
     @ApiOperation("订单详情接口")
     @ApiImplicitParam(name = "id", value = "订单id", required = true, dataType = "Long")
     @GetMapping
     public TwwOrderVO get(@RequestParam("id") long id);
+
+
+    @ApiOperation("支付订单接口")
+    @ApiImplicitParam(name = "dto", value = "订单支付请求实体类", required = true, dataType = "PayOrderDTO")
+    @PostMapping("payOrder")
+    public PayOrderVO payOrder(@RequestBody @Valid @NotNull PayOrderDTO dto,
+                               HttpServletResponse resp);
+
+
+    @ApiOperation("支付订单回调接口")
+    @GetMapping("payOrder/callback")
+    public void payOrderCallback(HttpServletRequest req, HttpServletResponse resp);
+
+
 }
