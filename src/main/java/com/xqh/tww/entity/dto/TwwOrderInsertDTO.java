@@ -15,7 +15,7 @@ public class TwwOrderInsertDTO
 
     @NotNull(message = "请选择娃娃")
     @Min(value = 1, message = "请选择娃娃")
-    private String dollId;
+    private Long dollId;
 
     @NotNull(message = Constant.LOGIN_TIMEOUT)
     @Min(value = 1, message = Constant.LOGIN_TIMEOUT)

@@ -2,10 +2,10 @@ package com.xqh.tww.controller.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.Page;
+import com.riversoft.weixin.pay.payment.bean.UnifiedOrderResponse;
 import com.xqh.tww.controller.api.IOrderController;
 import com.xqh.tww.entity.dto.PayOrderDTO;
 import com.xqh.tww.entity.dto.TwwOrderInsertDTO;
-import com.xqh.tww.entity.vo.PayOrderVO;
 import com.xqh.tww.entity.vo.TwwOrderVO;
 import com.xqh.tww.service.OrderService;
 import com.xqh.tww.service.PayService;
@@ -19,7 +19,6 @@ import com.xqh.tww.tkmybatis.mapper.TwwOrderMapper;
 import com.xqh.tww.tkmybatis.mapper.TwwOrderPayMapper;
 import com.xqh.tww.tkmybatis.mapper.TwwUserMapper;
 import com.xqh.tww.utils.common.*;
-import com.xqh.tww.utils.config.CommonConfig;
 import com.xqh.tww.utils.en.PreventRepeatEnum;
 import org.apache.ibatis.session.RowBounds;
 import org.slf4j.Logger;
@@ -74,14 +73,6 @@ public class OrderController implements IOrderController
     public long insertOrder(@RequestBody @Valid @NotNull TwwOrderInsertDTO dto,
                             HttpServletResponse resp)
     {
-        // 防重状态
-        boolean isRepeat = preventRepeatService.isRepeat(PreventRepeatEnum.ORDER.getCode(), orderService.getOrderRepeatFlag(dto));
-        if(isRepeat)
-        {
-            logger.error("重复请求 dto:{}", JSONObject.toJSON(dto));
-            CommonUtils.sendError(resp, ErrorResponseEunm.REPEAT_ORDER);
-            return 0;
-        }
 
         // 检验参数
         TwwDoll doll = dollMapper.selectByPrimaryKey(dto.getDollId());
@@ -90,6 +81,15 @@ public class OrderController implements IOrderController
         {
             logger.error("参数异常 doll:{}为空 或者 user:{}为空 ", doll, user);
             CommonUtils.sendError(resp, ErrorResponseEunm.INVALID_METHOD_ARGS);
+            return 0;
+        }
+
+        // 防重状态
+        boolean isRepeat = preventRepeatService.isRepeat(PreventRepeatEnum.ORDER.getCode(), orderService.getOrderRepeatFlag(dto.getUserId(), dto.getDollId()));
+        if(isRepeat)
+        {
+            logger.error("重复请求 dto:{}", JSONObject.toJSON(dto));
+            CommonUtils.sendError(resp, ErrorResponseEunm.REPEAT_ORDER);
             return 0;
         }
 
@@ -116,8 +116,9 @@ public class OrderController implements IOrderController
     }
 
     @Override
-    public PayOrderVO payOrder(@RequestBody @Valid @NotNull PayOrderDTO dto,
-                               HttpServletResponse resp)
+    public UnifiedOrderResponse payOrder(@RequestBody @Valid @NotNull PayOrderDTO dto,
+                                         HttpServletRequest req,
+                                         HttpServletResponse resp)
     {
         // 检验参数
         TwwOrder order = orderMapper.selectByPrimaryKey(dto.getOrderId());
@@ -146,10 +147,8 @@ public class OrderController implements IOrderController
             return null;
         }
 
-        // 返回支付url
-        PayOrderVO payOrderVO = new PayOrderVO();
-        payOrderVO.setPayUrl(payService.getPayUrl(pay.getId(), dto.getAmount(), user.getOpenId()));
-        return payOrderVO;
+        // 返回
+        return payService.getPayInfo(doll, user, pay, CommonUtils.getIp(req));
     }
 
     @Override

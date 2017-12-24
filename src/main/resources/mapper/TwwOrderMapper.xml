@@ -17,4 +17,8 @@
     <result column="create_time" property="createTime" jdbcType="BIGINT" />
     <result column="update_time" property="updateTime" jdbcType="BIGINT" />
   </resultMap>
+
+  <select id="selectByPrimaryKeyLock" resultMap="BaseResultMap">
+    select * from tww_order where id=#{id}
+  </select>
 </mapper>

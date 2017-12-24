@@ -1,8 +1,8 @@
 package com.xqh.tww.controller.api;
 
+import com.riversoft.weixin.pay.payment.bean.UnifiedOrderResponse;
 import com.xqh.tww.entity.dto.PayOrderDTO;
 import com.xqh.tww.entity.dto.TwwOrderInsertDTO;
-import com.xqh.tww.entity.vo.PayOrderVO;
 import com.xqh.tww.entity.vo.TwwOrderVO;
 import com.xqh.tww.utils.common.PageResult;
 import com.xqh.tww.utils.common.Search;
@@ -51,8 +51,9 @@ public interface IOrderController
     @ApiOperation("支付订单接口")
     @ApiImplicitParam(name = "dto", value = "订单支付请求实体类", required = true, dataType = "PayOrderDTO")
     @PostMapping("payOrder")
-    public PayOrderVO payOrder(@RequestBody @Valid @NotNull PayOrderDTO dto,
-                               HttpServletResponse resp);
+    public UnifiedOrderResponse payOrder(@RequestBody @Valid @NotNull PayOrderDTO dto,
+                                         HttpServletRequest req,
+                                         HttpServletResponse resp);
 
 
     @ApiOperation("支付订单回调接口")

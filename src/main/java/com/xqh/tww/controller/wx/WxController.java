@@ -6,6 +6,7 @@ import com.riversoft.weixin.pay.payment.Payments;
 import com.riversoft.weixin.pay.payment.bean.UnifiedOrderRequest;
 import com.riversoft.weixin.pay.payment.bean.UnifiedOrderResponse;
 import com.xqh.tww.entity.vo.TwwUserVO;
+import com.xqh.tww.service.PayService;
 import com.xqh.tww.service.UserService;
 import com.xqh.tww.tkmybatis.entity.TwwUser;
 import com.xqh.tww.utils.common.CommonUtils;
@@ -15,7 +16,7 @@ import com.xqh.tww.utils.config.CommonConfig;
 import com.xqh.tww.utils.wx.auth.WXAuthorizationCode;
 import com.xqh.tww.utils.wx.auth.WXOauth2;
 import com.xqh.tww.utils.wx.auth.WXUserInfo;
-import com.xqh.tww.utils.wx.notify.*;
+import com.xqh.tww.utils.wx.notify.XmlHelper;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,9 +31,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.math.BigDecimal;
 import java.net.URLEncoder;
-import java.util.Date;
+import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
@@ -53,6 +53,8 @@ public class WxController
     private UserService userService;
     @Resource
     private CommonConfig commonConfig;
+    @Resource
+    private PayService payService;
 
     @GetMapping("getOpenId")
     public void getOpenInit(HttpServletRequest req, HttpServletResponse resp)
@@ -120,8 +122,8 @@ public class WxController
         return ;
     }
 
-    @GetMapping("/pay")
-    public void pay()
+    @PostMapping("/pay")
+    public void payTest()
     {
         UnifiedOrderRequest unifiedOrderRequest = new UnifiedOrderRequest();
         unifiedOrderRequest.setBody("牛奶 小号");
@@ -131,7 +133,7 @@ public class WxController
         unifiedOrderRequest.setBillCreatedIp("192.168.1.103");
         unifiedOrderRequest.setNotifyUrl("http://gzriver.com/order/pay/notify");
         unifiedOrderRequest.setTradeType("JSAPI");
-        unifiedOrderRequest.setOpenId("oELhlt7Q-lRmLbRsPsaKeVX6pqjg");
+        unifiedOrderRequest.setOpenId("o8nQSwovwZXilsvNC_v1fUY--m_w");
 
         UnifiedOrderResponse response = Payments.defaultPayments().unifiedOrder(unifiedOrderRequest);
         logger.info("pay response:{}", response);
@@ -142,34 +144,41 @@ public class WxController
     {
         String notifyXml = getRequestBody(request);
 
-        if(logger.isInfoEnabled()) {
-            logger.info("received WeChat notify,notify context is {}", notifyXml);
-        }
-
         PrintWriter out = response.getWriter();
 
-        Trade payResult = buildPayResult(notifyXml);
+        Map<String, String> resultMap = buildPayResult(notifyXml);
 
-        if(payResult == null){
-            out.write(NotifyConstant.WX_RESPONSE_FAIL);
-        } else {
-            //payResult.setSource(1);
-            //ResultModel processResult = processorManager.process(payResult);
-            logger.info("微信公众号支付回调结果：{}", JSONObject.toJSON(payResult));
-
-            payResult.setTradeStatus(PayTask.STATUS_SUCCESS);
-            if(payResult.getTradeStatus()== PayTask.STATUS_SUCCESS){
-                out.write(WX_RESPONSE_SUCCESS);
-            }else {
-                out.write(WX_RESPONSE_FAIL);
+        logger.info("微信回调结果：{}", JSONObject.toJSON(resultMap));
+        boolean dealRes = true;
+        boolean notifyRes = true;
+        if("SUCCESS".equals(resultMap.get("result_code"))){
+            // 处理逻辑
+            try
+            {
+                payService.dealNotify(resultMap.get("out_trade_no"), resultMap.get("transaction_id"));
+            } catch (Exception e)
+            {
+                dealRes = false;
+                logger.error("支付回调处理失败 payId:{} e:{}", resultMap.get("out_trade_no"), e);
             }
+        }else {
+            notifyRes = false;
+            logger.error("支付回调 结果失败");
         }
 
+        logger.info("支付回调 notifyRes:{} dealRes:{}", notifyRes, dealRes);
+        if(notifyRes && dealRes) {
+            logger.info("支付回调成功");
+            out.write(WX_RESPONSE_FAIL);
+        } else {
+            logger.warn("支付回调失败");
+            out.write(WX_RESPONSE_SUCCESS);
+        }
         out.flush();
         out.close();
     }
 
-    private Trade buildPayResult(String notifyXml){
+    private Map<String, String> buildPayResult(String notifyXml){
 
         SortedMap<String,String> map = XmlHelper.parseXmlToMap(notifyXml);
         if( map == null ){
@@ -184,17 +193,7 @@ public class WxController
         //    return null;
         //}
 
-        Trade payResult = new Trade();
-        payResult.setPayStatus("SUCCESS".equals(map.get("result_code")) ? PayStatus.STATUS_SUCCESS : PayStatus.STATUS_FAIL);
-        payResult.setTradeStatus("SUCCESS".equals(map.get("result_code")) ? PayTask.STATUS_SUCCESS : PayTask.STATUS_FAIL);
-        String totalFeeStr = map.get("total_fee");
-        payResult.setTotalFee(new BigDecimal(totalFeeStr));
-        payResult.setOrderId(map.get("out_trade_no"));
-        payResult.setOutTradeId(map.get("transaction_id"));
-        payResult.setReturnContent(notifyXml);
-        payResult.setResultTime(new Date());
-
-        return payResult;
+        return map;
     }
 
     private String getRequestBody(HttpServletRequest request) throws IOException {

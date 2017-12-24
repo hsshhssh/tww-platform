@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
+import tk.mybatis.mapper.entity.Example;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -29,7 +30,7 @@ public class PreventRepeatService
 
         Search search = new Search();
         search.put("type_eq", type);
-        search.put("repeatFlag_eq", type);
+        search.put("repeatFlag_eq", repeatFlag);
         List<TwwPreventRepeat> preventRepeatList = preventRepeatMapper.selectByExample(new ExampleBuilder(TwwPreventRepeat.class).search(search).build());
 
         if(CollectionUtils.isNotEmpty(preventRepeatList))
@@ -53,5 +54,17 @@ public class PreventRepeatService
         logger.info("无重复请求 type:{}, repeatFlag:{}", type, repeatFlag);
         return true;
     }
+
+    public boolean removeRepeatFlag(int type, String repeatFlag)
+    {
+        Search search = new Search();
+        search.put("type_eq", type);
+        search.put("repeatFlag_eq", repeatFlag);
+        Example example = new ExampleBuilder(TwwPreventRepeat.class).search(search).build();
+        preventRepeatMapper.deleteByExample(example);
+
+        return true;
+    }
+
 
 }

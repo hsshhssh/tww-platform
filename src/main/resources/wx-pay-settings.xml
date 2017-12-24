@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <body>
-    <mchId>mchId</mchId>
-    <appId>appId</appId>
-    <key>key</key>
-    <certPath>certPath</certPath>
-    <certPassword>certPassword</certPassword>
+    <mchId>1494876292</mchId>
+    <appId>wxb9e4c630ffe272e7</appId>
+    <key>zhuawawa233EWq3esfh54FfffwSDADDD</key>
+    <certPath>C:\Users\34673\Desktop\apiclient_cert.p12</certPath>
+    <certPassword>1494876292</certPassword>
 </body>

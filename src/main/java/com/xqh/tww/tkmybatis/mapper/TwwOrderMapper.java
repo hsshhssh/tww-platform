@@ -5,4 +5,5 @@ import tk.mybatis.mapper.common.Mapper;
 
 public interface TwwOrderMapper extends Mapper<TwwOrder>
 {
+    public TwwOrder selectByPrimaryKeyLock(Long id);
 }
