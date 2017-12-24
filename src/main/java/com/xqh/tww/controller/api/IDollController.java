@@ -27,7 +27,7 @@ public interface IDollController
         @ApiImplicitParam(name = "page", value = "页码", defaultValue = "1", dataType = "Integer"),
         @ApiImplicitParam(name = "size", value = "每页条数", defaultValue = "10", dataType = "Integer")
     })
-    @GetMapping("list")
+    @PostMapping("list")
     public PageResult<TwwDollVO> list(@RequestParam("search") @Valid @NotNull Search search,
                                       @RequestParam(value = "page", defaultValue = "1")  int page,
                                       @RequestParam(value = "size", defaultValue = "10") int size);
