@@ -1,5 +1,6 @@
 package com.xqh.tww.service;
 
+import com.alibaba.fastjson.JSONObject;
 import com.xqh.tww.tkmybatis.entity.TwwUser;
 import com.xqh.tww.tkmybatis.mapper.TwwUserMapper;
 import com.xqh.tww.utils.common.DozerUtils;
@@ -32,22 +33,33 @@ public class UserService
         twwUser.setCreateTime(nowTime);
         twwUser.setUpdateTime(nowTime);
 
+        TwwUser oldTwwUser = selectByOpenIdInner(twwUser.getOpenId());
+        if(null != oldTwwUser)
+        {
+            return update(oldTwwUser);
+        }
+
+        logger.info("新用户 twwUser:{}", JSONObject.toJSON(twwUser));
         try
         {
             twwUserMapper.insertSelective(twwUser);
         } catch (DuplicateKeyException e)
         {
-            logger.info("openId:{} 已注册 更新信息：{}", twwUser.getOpenId(), twwUser);
-            TwwUser oldTwwUser = selectByOpenIdInner(twwUser.getOpenId());
-            TwwUser newTwwUser = DozerUtils.map(twwUser, TwwUser.class);
-            newTwwUser.setId(oldTwwUser.getId());
-            newTwwUser.setCreateTime(null);
-            twwUserMapper.updateByPrimaryKeySelective(newTwwUser);
-            return newTwwUser;
-
+            return update(twwUser);
         }
 
         return twwUser;
+    }
+
+    private TwwUser update(TwwUser twwUser)
+    {
+        logger.info("openId:{} 已注册 更新信息：{}", twwUser.getOpenId(), twwUser);
+        TwwUser oldTwwUser = selectByOpenIdInner(twwUser.getOpenId());
+        TwwUser newTwwUser = DozerUtils.map(twwUser, TwwUser.class);
+        newTwwUser.setId(oldTwwUser.getId());
+        newTwwUser.setCreateTime(null);
+        twwUserMapper.updateByPrimaryKeySelective(newTwwUser);
+        return newTwwUser;
     }
 
     private TwwUser selectByOpenIdInner(String openId)
