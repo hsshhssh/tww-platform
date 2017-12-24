@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.Page;
 import com.riversoft.weixin.pay.payment.bean.UnifiedOrderResponse;
 import com.xqh.tww.controller.api.IOrderController;
+import com.xqh.tww.entity.dto.ListDTO;
 import com.xqh.tww.entity.dto.PayOrderDTO;
 import com.xqh.tww.entity.dto.TwwOrderInsertDTO;
 import com.xqh.tww.entity.vo.TwwOrderVO;
@@ -60,12 +61,10 @@ public class OrderController implements IOrderController
     private TwwOrderPayMapper payMapper;
 
     @Override
-    public PageResult<TwwOrderVO> list(@RequestParam("search") @Valid @NotNull Search search,
-                                       @RequestParam(value = "page", defaultValue = "1") int page,
-                                       @RequestParam(value = "size", defaultValue = "10") int size)
+    public PageResult<TwwOrderVO> list(@RequestBody @Valid @NotNull ListDTO dto)
     {
-        Example example = new ExampleBuilder(TwwOrder.class).search(search).sort(Arrays.asList("id_desc")).build();
-        Page<TwwOrder> twwDollPage = (Page<TwwOrder>) orderMapper.selectByExampleAndRowBounds(example, new RowBounds(page, size));
+        Example example = new ExampleBuilder(TwwOrder.class).search(dto.getSearch()).sort(Arrays.asList("id_desc")).build();
+        Page<TwwOrder> twwDollPage = (Page<TwwOrder>) orderMapper.selectByExampleAndRowBounds(example, new RowBounds(dto.getPage(), dto.getSize()));
         return new PageResult<>(twwDollPage.getTotal(), DozerUtils.mapList(twwDollPage.getResult(), TwwOrderVO.class));
     }
 

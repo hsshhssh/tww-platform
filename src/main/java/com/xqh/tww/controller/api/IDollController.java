@@ -1,10 +1,10 @@
 package com.xqh.tww.controller.api;
 
 import com.xqh.tww.entity.dto.CanPleaseDollDTO;
+import com.xqh.tww.entity.dto.ListDTO;
 import com.xqh.tww.entity.vo.CanPleaseDollVO;
 import com.xqh.tww.entity.vo.TwwDollVO;
 import com.xqh.tww.utils.common.PageResult;
-import com.xqh.tww.utils.common.Search;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -28,9 +28,7 @@ public interface IDollController
         @ApiImplicitParam(name = "size", value = "每页条数", defaultValue = "10", dataType = "Integer")
     })
     @PostMapping("list")
-    public PageResult<TwwDollVO> list(@RequestParam("search") @Valid @NotNull Search search,
-                                      @RequestParam(value = "page", defaultValue = "1")  int page,
-                                      @RequestParam(value = "size", defaultValue = "10") int size);
+    public PageResult<TwwDollVO> list(@RequestBody @Valid @NotNull ListDTO dto);
 
 
     @ApiOperation("娃娃详情接口")

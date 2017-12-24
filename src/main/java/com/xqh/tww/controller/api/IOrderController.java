@@ -1,11 +1,11 @@
 package com.xqh.tww.controller.api;
 
 import com.riversoft.weixin.pay.payment.bean.UnifiedOrderResponse;
+import com.xqh.tww.entity.dto.ListDTO;
 import com.xqh.tww.entity.dto.PayOrderDTO;
 import com.xqh.tww.entity.dto.TwwOrderInsertDTO;
 import com.xqh.tww.entity.vo.TwwOrderVO;
 import com.xqh.tww.utils.common.PageResult;
-import com.xqh.tww.utils.common.Search;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -31,9 +31,7 @@ public interface IOrderController
             @ApiImplicitParam(name = "size", value = "每页条数", defaultValue = "10", dataType = "Integer")
     })
     @PostMapping("list")
-    public PageResult<TwwOrderVO> list(@RequestParam("search") @Valid @NotNull Search search,
-                                       @RequestParam(value = "page", defaultValue = "1")  int page,
-                                       @RequestParam(value = "size", defaultValue = "10") int size);
+    public PageResult<TwwOrderVO> list(@RequestBody @Valid @NotNull ListDTO dto);
 
     @ApiOperation("创建订单接口")
     @ApiImplicitParam(name = "dto", value = "创建订单实体类", required = true, dataType = "TwwOrderInsertDTO")
