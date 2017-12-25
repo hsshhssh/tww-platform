@@ -51,7 +51,6 @@ public interface IOrderController
     @ApiOperation("支付订单接口")
     @ApiImplicitParam(name = "dto", value = "订单支付请求实体类", required = true, dataType = "PayOrderDTO")
     @PostMapping("payOrder")
-    @ApiIgnore
     public Map<String, Object> payOrder(@RequestBody @Valid @NotNull PayOrderDTO dto,
                                         HttpServletRequest req,
                                         HttpServletResponse resp);
