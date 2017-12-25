@@ -59,7 +59,7 @@ public class DemoApplication {
 		return new Docket(DocumentationType.SWAGGER_2)
 				.apiInfo(apiInfo)
 				.select()
-				.apis(RequestHandlerSelectors.basePackage("com.xqh.tww.controller.impl"))
+				.apis(RequestHandlerSelectors.basePackage("com.xqh.tww.controller"))
 				.paths(PathSelectors.any())
 				.build();
 	}
