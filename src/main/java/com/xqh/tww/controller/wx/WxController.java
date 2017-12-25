@@ -2,9 +2,6 @@ package com.xqh.tww.controller.wx;
 
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.base.Throwables;
-import com.riversoft.weixin.pay.payment.Payments;
-import com.riversoft.weixin.pay.payment.bean.UnifiedOrderRequest;
-import com.riversoft.weixin.pay.payment.bean.UnifiedOrderResponse;
 import com.xqh.tww.entity.dto.WxShareDTO;
 import com.xqh.tww.entity.vo.TwwUserVO;
 import com.xqh.tww.service.PayService;
@@ -19,6 +16,8 @@ import com.xqh.tww.utils.wx.auth.WXOauth2;
 import com.xqh.tww.utils.wx.auth.WXUserInfo;
 import com.xqh.tww.utils.wx.auth.WechatUtil;
 import com.xqh.tww.utils.wx.notify.XmlHelper;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,6 +43,7 @@ import static com.xqh.tww.utils.wx.notify.NotifyConstant.WX_RESPONSE_SUCCESS;
 /**
  * Created by hssh on 2017/12/23.
  */
+@Api("微信相关")
 @RequestMapping("/xqh/wawa/tww/wx")
 @RestController
 public class WxController
@@ -58,6 +58,7 @@ public class WxController
     private PayService payService;
 
     @GetMapping("getOpenId")
+    @ApiOperation("获取openId接口")
     public void getOpenInit(HttpServletRequest req, HttpServletResponse resp)
     {
         logger.info("进入getOpenId.......");
@@ -74,6 +75,7 @@ public class WxController
     }
 
     @GetMapping("getCode")
+    @ApiOperation("获取openId回调接口")
     public TwwUserVO getCode(HttpServletRequest req, HttpServletResponse resp)
     {
         TreeMap<String, String> params = CommonUtils.getParams(req);
@@ -116,31 +118,9 @@ public class WxController
         return DozerUtils.map(userService.insert(twwUser), TwwUserVO.class);
     }
 
-    @GetMapping("shareUrl")
-    public void shareUrl(HttpServletRequest req, HttpServletResponse resp)
-    {
-        //WechatUtil.setWechatJsConfig2()
-        return ;
-    }
-
-    @PostMapping("/pay")
-    public void payTest()
-    {
-        UnifiedOrderRequest unifiedOrderRequest = new UnifiedOrderRequest();
-        unifiedOrderRequest.setBody("牛奶 小号");
-        unifiedOrderRequest.setDetail("小号牛奶 鲜奶");
-        unifiedOrderRequest.setTradeNumber("1292063901201605160012300016");
-        unifiedOrderRequest.setTotalFee(100);
-        unifiedOrderRequest.setBillCreatedIp("192.168.1.103");
-        unifiedOrderRequest.setNotifyUrl("http://gzriver.com/order/pay/notify");
-        unifiedOrderRequest.setTradeType("JSAPI");
-        unifiedOrderRequest.setOpenId("o8nQSwovwZXilsvNC_v1fUY--m_w");
-
-        UnifiedOrderResponse response = Payments.defaultPayments().unifiedOrder(unifiedOrderRequest);
-        logger.info("pay response:{}", response);
-    }
 
     @PostMapping("/pay/callback")
+    @ApiOperation("微信支付回调")
     public void payCallback(HttpServletRequest request, HttpServletResponse response) throws IOException
     {
         String notifyXml = getRequestBody(request);
@@ -211,6 +191,7 @@ public class WxController
 
 
     @PostMapping("/share")
+    @ApiOperation("微信分享接口")
     public Map<String, Object> share(@RequestBody @Valid @NotNull WxShareDTO dto)
     {
         return WechatUtil.setWechatJsConfig2(commonConfig.getShareUrl().trim(), "orderId=" + dto.getOrderId());

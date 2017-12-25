@@ -10,6 +10,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -30,6 +31,7 @@ public interface ISupportController
             @ApiImplicitParam(name = "size", value = "每页条数", defaultValue = "10", dataType = "Integer")
     })
     @GetMapping("list")
+    @ApiIgnore
     public PageResult<TwwSupportVO> list(@RequestParam("search") @Valid @NotNull Search search,
                                          @RequestParam(value = "page", defaultValue = "1")  int page,
                                          @RequestParam(value = "size", defaultValue = "10") int size);
@@ -37,10 +39,12 @@ public interface ISupportController
     @ApiOperation("赞助接口")
     @ApiImplicitParam(name = "dto", value = "赞助接口实体类", required = true, dataType = "SupportDTO")
     @PostMapping
+    @ApiIgnore
     public SupportVO support(@RequestBody @NotNull @Valid SupportDTO dto);
 
 
     @ApiOperation("赞助回调接口")
     @GetMapping
+    @ApiIgnore
     public String supportCallback(HttpServletRequest req, HttpServletResponse resp);
 }

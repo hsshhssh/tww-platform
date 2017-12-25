@@ -10,6 +10,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -43,12 +44,14 @@ public interface IOrderController
     @ApiOperation("订单详情接口")
     @ApiImplicitParam(name = "id", value = "订单id", required = true, dataType = "Long")
     @GetMapping
+    @ApiIgnore
     public TwwOrderVO get(@RequestParam("id") long id);
 
 
     @ApiOperation("支付订单接口")
     @ApiImplicitParam(name = "dto", value = "订单支付请求实体类", required = true, dataType = "PayOrderDTO")
     @PostMapping("payOrder")
+    @ApiIgnore
     public Map<String, Object> payOrder(@RequestBody @Valid @NotNull PayOrderDTO dto,
                                         HttpServletRequest req,
                                         HttpServletResponse resp);
@@ -56,6 +59,7 @@ public interface IOrderController
 
     @ApiOperation("支付订单回调接口")
     @GetMapping("payOrder/callback")
+    @ApiIgnore
     public void payOrderCallback(HttpServletRequest req, HttpServletResponse resp);
 
 
