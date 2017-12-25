@@ -23,5 +23,7 @@ public class CommonConfig
     @Value(path = "/config/zkconf/wawa_tww.conf", key = "key")
     private String key;
 
+    @Value(path = "/config/zkconf/wawa_tww.conf", key = "shareUrl")
+    private String shareUrl;
 
 }

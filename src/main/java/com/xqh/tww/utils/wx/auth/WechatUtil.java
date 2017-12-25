@@ -22,10 +22,10 @@ public class WechatUtil implements ApplicationListener<ContextRefreshedEvent> {
 	private static Logger log = Logger.getLogger(WechatUtil.class);
 
 	// @Value("#{weixinConfig.appid}")
-	public static String appid = "wx254ab70c702ef64b";
+	public static String appid = "wxb9e4c630ffe272e7";
 
 	// @Value("#{weixinConfig.appsecret}")
-	public static String appsecret = "b5161a8acb97ba83c18400e47add094a";
+	public static String appsecret = "107e969f8d112763b931b41379c7183f";
 	
 	private static String partnerkey = "1399562302";
 	

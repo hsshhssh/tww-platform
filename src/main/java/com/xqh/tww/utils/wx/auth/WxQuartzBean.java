@@ -1,5 +1,6 @@
 package com.xqh.tww.utils.wx.auth;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
 import java.util.HashMap;
@@ -69,10 +70,16 @@ public class WxQuartzBean{
 	}
 
 	public static String getAccess_token() {
+		if(StringUtils.isBlank(access_token)) {
+			updateAccessTokenAndTicket();
+		}
 		return access_token;
 	}
 
 	public static String getTicket() {
+		if(StringUtils.isBlank(ticket)) {
+			updateAccessTokenAndTicket();
+		}
 		return ticket;
 	}
 

@@ -5,6 +5,7 @@ import com.google.common.base.Throwables;
 import com.riversoft.weixin.pay.payment.Payments;
 import com.riversoft.weixin.pay.payment.bean.UnifiedOrderRequest;
 import com.riversoft.weixin.pay.payment.bean.UnifiedOrderResponse;
+import com.xqh.tww.entity.dto.WxShareDTO;
 import com.xqh.tww.entity.vo.TwwUserVO;
 import com.xqh.tww.service.PayService;
 import com.xqh.tww.service.UserService;
@@ -16,18 +17,18 @@ import com.xqh.tww.utils.config.CommonConfig;
 import com.xqh.tww.utils.wx.auth.WXAuthorizationCode;
 import com.xqh.tww.utils.wx.auth.WXOauth2;
 import com.xqh.tww.utils.wx.auth.WXUserInfo;
+import com.xqh.tww.utils.wx.auth.WechatUtil;
 import com.xqh.tww.utils.wx.notify.XmlHelper;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -207,5 +208,14 @@ public class WxController
         reader.close();
         return sb.toString();
     }
+
+
+    @PostMapping("/share")
+    public Map<String, Object> share(@RequestBody @Valid @NotNull WxShareDTO dto)
+    {
+        return WechatUtil.setWechatJsConfig2(commonConfig.getShareUrl().trim(), "orderId=" + dto.getOrderId());
+    }
+
+
 
 }
