@@ -65,7 +65,7 @@ public class WxController
 
         try
         {
-            String redirectUrl = URLEncoder.encode(commonConfig.getHost().trim() +  "/xqh/wawa/tww/wx/getCode", "utf8");
+            String redirectUrl = URLEncoder.encode(commonConfig.getCodeRedirectUrl().trim(), "utf8");
             String authorizeUrl = WXOauth2.authorize(redirectUrl);
             resp.sendRedirect(authorizeUrl);
         } catch (IOException e)
@@ -74,9 +74,9 @@ public class WxController
         }
     }
 
-    @GetMapping("getCode")
+    @GetMapping("getInfo")
     @ApiOperation("获取openId回调接口")
-    public TwwUserVO getCode(HttpServletRequest req, HttpServletResponse resp)
+    public TwwUserVO getInfo(HttpServletRequest req, HttpServletResponse resp)
     {
         TreeMap<String, String> params = CommonUtils.getParams(req);
         for (String s : params.keySet())
