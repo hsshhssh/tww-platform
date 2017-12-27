@@ -1,7 +1,6 @@
 package com.xqh.tww.controller.wx;
 
 import com.alibaba.fastjson.JSONObject;
-import com.google.common.base.Throwables;
 import com.xqh.tww.entity.dto.WxShareDTO;
 import com.xqh.tww.entity.vo.TwwUserVO;
 import com.xqh.tww.service.PayService;
@@ -58,19 +57,13 @@ public class WxController
 
     @GetMapping("getOpenId")
     @ApiOperation("获取openId接口")
-    public void getOpenInit(HttpServletRequest req, HttpServletResponse resp)
+    public String getOpenInit(HttpServletRequest req, HttpServletResponse resp)
     {
         logger.info("进入getOpenId.......");
 
-        try
-        {
-            String redirectUrl = req.getParameter("url");
-            String authorizeUrl = WXOauth2.authorize(redirectUrl);
-            resp.sendRedirect(authorizeUrl);
-        } catch (IOException e)
-        {
-            logger.error("跳转失败 {}", Throwables.getStackTraceAsString(e));
-        }
+        String redirectUrl = req.getParameter("url");
+        return WXOauth2.authorize(redirectUrl);
+
     }
 
     @GetMapping("getInfo")
