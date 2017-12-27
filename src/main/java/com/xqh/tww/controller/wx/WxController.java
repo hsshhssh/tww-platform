@@ -2,6 +2,7 @@ package com.xqh.tww.controller.wx;
 
 import com.alibaba.fastjson.JSONObject;
 import com.xqh.tww.entity.dto.WxShareDTO;
+import com.xqh.tww.entity.vo.GetOpenIdInitVO;
 import com.xqh.tww.entity.vo.TwwUserVO;
 import com.xqh.tww.service.PayService;
 import com.xqh.tww.service.UserService;
@@ -56,18 +57,23 @@ public class WxController
     private PayService payService;
 
     @GetMapping("getOpenId")
-    @ApiOperation("获取openId接口")
-    public String getOpenInit(HttpServletRequest req, HttpServletResponse resp)
+    @ApiOperation("获取openId初始化接口")
+    public GetOpenIdInitVO getOpenIdInit(HttpServletRequest req, HttpServletResponse resp)
     {
         logger.info("进入getOpenId.......");
 
         String redirectUrl = req.getParameter("url");
-        return WXOauth2.authorize(redirectUrl);
+        String url = WXOauth2.authorize(redirectUrl);
+        logger.info("return url:{}", url);
+
+        GetOpenIdInitVO vo = new GetOpenIdInitVO();
+        vo.setUrl(url);
+        return vo;
 
     }
 
     @GetMapping("getInfo")
-    @ApiOperation("获取openId回调接口")
+    @ApiOperation("获取微信用户信息接口")
     public TwwUserVO getInfo(HttpServletRequest req, HttpServletResponse resp)
     {
         TreeMap<String, String> params = CommonUtils.getParams(req);
