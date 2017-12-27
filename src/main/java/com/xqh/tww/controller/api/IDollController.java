@@ -7,7 +7,6 @@ import com.xqh.tww.entity.vo.TwwDollVO;
 import com.xqh.tww.utils.common.PageResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
@@ -23,11 +22,7 @@ import javax.validation.constraints.NotNull;
 public interface IDollController
 {
     @ApiOperation("娃娃列表接口")
-    @ApiImplicitParams({
-        @ApiImplicitParam(name = "search", value = "高级查询对象", required = true, dataType = "Map"),
-        @ApiImplicitParam(name = "page", value = "页码", defaultValue = "1", dataType = "Integer"),
-        @ApiImplicitParam(name = "size", value = "每页条数", defaultValue = "10", dataType = "Integer")
-    })
+    @ApiImplicitParam(name = "dto", value = "查询请求对象", required = true, dataType = "ListDTO")
     @PostMapping("list")
     public PageResult<TwwDollVO> list(@RequestBody @Valid @NotNull ListDTO dto);
 
