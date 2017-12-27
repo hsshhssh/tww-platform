@@ -31,7 +31,6 @@ import javax.validation.constraints.NotNull;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.net.URLEncoder;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -65,7 +64,7 @@ public class WxController
 
         try
         {
-            String redirectUrl = URLEncoder.encode(commonConfig.getCodeRedirectUrl().trim(), "utf8");
+            String redirectUrl = req.getParameter("url");
             String authorizeUrl = WXOauth2.authorize(redirectUrl);
             resp.sendRedirect(authorizeUrl);
         } catch (IOException e)
