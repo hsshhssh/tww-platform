@@ -196,7 +196,7 @@ public class WxController
             logger.error("获取ticket异常");
             return null;
         }
-        logger.info("wx share. ticket:{}", ticket);
+        logger.info("wx share. ticket:{} dto:{}", ticket, dto);
         return WxShare.jsSDK_Sign(dto.getShareUrl(), ticket, commonConfig.getAppId());
     }
 
