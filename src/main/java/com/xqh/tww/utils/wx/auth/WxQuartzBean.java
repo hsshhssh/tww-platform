@@ -61,12 +61,13 @@ public class WxQuartzBean{
 	}
 	
 	//手动调用刷新access_token，用于access_token失效时刷新
-	public static void updateAccessToken() {
-		Map<String, String> parameter = new HashMap<>();
-		parameter.put("grant_type", "client_credential");
-		parameter.put("appid", appid);
-		parameter.put("secret", appsecret);
-		access_token = WechatUtil.getJustParameterFromWeiXinApi("access_token", accessTokenUrl, parameter, null);
+	public static void updateAccessToken(String at) {
+		//Map<String, String> parameter = new HashMap<>();
+		//parameter.put("grant_type", "client_credential");
+		//parameter.put("appid", appid);
+		//parameter.put("secret", appsecret);
+		//access_token = WechatUtil.getJustParameterFromWeiXinApi("access_token", accessTokenUrl, parameter, null);
+		access_token = at;
 	}
 
 	public static String getAccess_token() {
