@@ -11,10 +11,8 @@ import com.xqh.tww.utils.common.CommonUtils;
 import com.xqh.tww.utils.common.DozerUtils;
 import com.xqh.tww.utils.common.ErrorResponseEunm;
 import com.xqh.tww.utils.config.CommonConfig;
-import com.xqh.tww.utils.wx.auth.WXAuthorizationCode;
-import com.xqh.tww.utils.wx.auth.WXOauth2;
-import com.xqh.tww.utils.wx.auth.WXUserInfo;
-import com.xqh.tww.utils.wx.auth.WechatUtil;
+import com.xqh.tww.utils.wx.WxShare;
+import com.xqh.tww.utils.wx.auth.*;
 import com.xqh.tww.utils.wx.notify.XmlHelper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -190,9 +188,15 @@ public class WxController
 
     @PostMapping("/share")
     @ApiOperation("微信分享接口")
-    public Map<String, Object> share(@RequestBody @Valid @NotNull WxShareDTO dto)
+    public Map<String, String> share(@RequestBody @Valid @NotNull WxShareDTO dto) throws Exception
     {
-        return WechatUtil.setWechatJsConfig2(commonConfig.getShareUrl().trim(), "orderId=" + dto.getOrderId());
+        //return WechatUtil.setWechatJsConfig2(commonConfig.getShareUrl().trim(), "orderId=" + dto.getOrderId());
+        String ticket = WxQuartzBean.getTicket();
+        if(StringUtils.isBlank(ticket)) {
+            logger.error("获取ticket异常");
+            return null;
+        }
+        return WxShare.jsSDK_Sign(dto.getShareUrl(), ticket, commonConfig.getAppId());
     }
 
 
