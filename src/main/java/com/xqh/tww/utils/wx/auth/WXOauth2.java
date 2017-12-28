@@ -84,35 +84,35 @@ public class WXOauth2 {
 		JSONObject jsonObject = JSON.parseObject(jsonStr);
 		String errcode = String.valueOf(jsonObject.get("errcode"));
 		System.out.println(errcode);
-		if (errcode != null && errcode.equals("40001")) {
-			// 当有错误信息时且错误码为40001，刷新access_token
-			System.out.println("#####################################刷新access_token");
-			WxQuartzBean.updateAccessToken();
-			// return wxUserInfo(WxQuartzBean.getAccess_token(), openid);
-			accessToken = WxQuartzBean.getAccess_token();
-			System.out.println("#####################################2:" + accessToken);
-			accessTokenUrl = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=%s&openid=%s&lang=zh_CN";
-			accessTokenUrl = String.format(accessTokenUrl, accessToken, openid);
-			jsonStr = HttpKit.get(accessTokenUrl);
-			System.out.println(jsonStr);
-			// Thread.sleep(5000);
-			jsonObject = JSON.parseObject(jsonStr);
-		}
-		if (StringUtils.isBlank(jsonObject.getString("unionid"))) {
-			// 当有错误信息时且错误码为40001，刷新access_token
-			System.out.println("unionidunionidunionidunionid#####################################刷新access_token");
-			WxQuartzBean.updateAccessToken();
-			// return wxUserInfo(WxQuartzBean.getAccess_token(), openid);
-			accessToken = WxQuartzBean.getAccess_token();
-			System.out.println("#####################################3:" + accessToken);
-			accessTokenUrl = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=%s&openid=%s&lang=zh_CN";
-			accessTokenUrl = String.format(accessTokenUrl, accessToken, openid);
-			jsonStr = HttpKit.get(accessTokenUrl);
-			System.out.println(jsonStr);
-			// Thread.sleep(5000);
-			jsonObject = JSON.parseObject(jsonStr);
-
-		}
+		//if (errcode != null && errcode.equals("40001")) {
+		//	// 当有错误信息时且错误码为40001，刷新access_token
+		//	System.out.println("#####################################刷新access_token");
+		//	WxQuartzBean.updateAccessToken();
+		//	// return wxUserInfo(WxQuartzBean.getAccess_token(), openid);
+		//	accessToken = WxQuartzBean.getAccess_token();
+		//	System.out.println("#####################################2:" + accessToken);
+		//	accessTokenUrl = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=%s&openid=%s&lang=zh_CN";
+		//	accessTokenUrl = String.format(accessTokenUrl, accessToken, openid);
+		//	jsonStr = HttpKit.get(accessTokenUrl);
+		//	System.out.println(jsonStr);
+		//	// Thread.sleep(5000);
+		//	jsonObject = JSON.parseObject(jsonStr);
+		//}
+		//if (StringUtils.isBlank(jsonObject.getString("unionid"))) {
+		//	// 当有错误信息时且错误码为40001，刷新access_token
+		//	System.out.println("unionidunionidunionidunionid#####################################刷新access_token");
+		//	WxQuartzBean.updateAccessToken();
+		//	// return wxUserInfo(WxQuartzBean.getAccess_token(), openid);
+		//	accessToken = WxQuartzBean.getAccess_token();
+		//	System.out.println("#####################################3:" + accessToken);
+		//	accessTokenUrl = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=%s&openid=%s&lang=zh_CN";
+		//	accessTokenUrl = String.format(accessTokenUrl, accessToken, openid);
+		//	jsonStr = HttpKit.get(accessTokenUrl);
+		//	System.out.println(jsonStr);
+		//	// Thread.sleep(5000);
+		//	jsonObject = JSON.parseObject(jsonStr);
+        //
+		//}
 		WXUserInfo wxUserInfo = new WXUserInfo();
 		wxUserInfo.setOpenid(jsonObject.getString("openid"));
 		wxUserInfo.setNickname(jsonObject.getString("nickname"));
