@@ -105,8 +105,6 @@ public class WxController
             return null;
         }
 
-        WxQuartzBean.updateAccessToken(wxAuthorizationCode.getAccess_token());
-
         logger.info("获取openId成功 插入或者更新信息 openId:{}", wxUserInfo.getOpenid());
         TwwUser twwUser = new TwwUser();
         twwUser.setOpenId(wxUserInfo.getOpenid());
