@@ -41,7 +41,7 @@ import static com.xqh.tww.utils.wx.notify.NotifyConstant.WX_RESPONSE_SUCCESS;
  * Created by hssh on 2017/12/23.
  */
 @Api("微信相关")
-@RequestMapping("/xqh/wawa/tww/wx")
+@RequestMapping("/xqh/wawa/tww/wx/old")
 @RestController
 public class WxController
 {
