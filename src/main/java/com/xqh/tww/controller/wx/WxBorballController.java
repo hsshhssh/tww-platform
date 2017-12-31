@@ -27,7 +27,7 @@ import java.io.IOException;
  * Created by hssh on 2017/12/31.
  */
 @Api("微信相关Borball")
-@RequestMapping("/xqh/wawa/tww/wx")
+@RequestMapping("/xqh/wawa/tww/wx/borball")
 @RestController
 @Slf4j
 public class WxBorballController
