@@ -64,6 +64,7 @@ public class OrderController implements IOrderController
     @Override
     public PageResult<TwwOrderVO> list(@RequestBody @Valid @NotNull ListDTO dto)
     {
+        logger.info("order list dto:{}", JSONObject.toJSON(dto));
         Example example = new ExampleBuilder(TwwOrder.class).search(dto.getSearch()).sort(Arrays.asList("id_desc")).build();
         Page<TwwOrder> twwDollPage = (Page<TwwOrder>) orderMapper.selectByExampleAndRowBounds(example, new RowBounds(dto.getPage(), dto.getSize()));
         return new PageResult<>(twwDollPage.getTotal(), DozerUtils.mapList(twwDollPage.getResult(), TwwOrderVO.class));
