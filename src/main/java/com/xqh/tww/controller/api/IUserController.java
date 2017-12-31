@@ -30,18 +30,15 @@ public interface IUserController
     @ApiOperation("获取收货地址")
     @ApiImplicitParam(name = "uid", value = "用户id", required = true, dataType = "Long")
     @GetMapping("address")
-    @ApiIgnore
     public TwwUserAddressVO getAddress(@RequestParam(name = "uid") @Min(1) @Valid long uid);
 
     @ApiOperation("新增收货地址")
     @ApiImplicitParam(name = "dto", value = "新增地址实体类", required = true, dataType = "TwwUserAddressInsertDTO")
     @PutMapping("address")
-    @ApiIgnore
     public long insertAddress(@RequestBody @Valid TwwUserAddressInsertDTO dto);
 
     @ApiOperation("修改收货地址")
     @ApiImplicitParam(name = "dto", value = "修改地址实体类", required = true, dataType = "TwwUserAddressUpdateDTO")
     @PostMapping("address")
-    @ApiIgnore
     public long updateAddress(@RequestBody @Valid TwwUserAddressUpdateDTO dto);
 }
