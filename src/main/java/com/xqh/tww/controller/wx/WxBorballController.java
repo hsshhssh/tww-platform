@@ -52,7 +52,7 @@ public class WxBorballController
         String redirectUrl = req.getParameter("url");
         log.info("redirectUrl:{}", redirectUrl);
 
-        String url = openOAuth2s.authenticationUrl(redirectUrl);
+        String url = openOAuth2s.authenticationUrl(redirectUrl, commonConfig.getScope().trim());
         GetOpenIdInitVO vo = new GetOpenIdInitVO();
         vo.setUrl(url);
         log.info("WxBorballController 获取openId初始化接口 返回值 vo:{}", vo);

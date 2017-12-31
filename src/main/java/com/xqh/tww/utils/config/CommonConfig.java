@@ -32,4 +32,7 @@ public class CommonConfig
     @Value(path = "/config/zkconf/wawa_tww.conf", key = "codeRedirectUrl")
     private String codeRedirectUrl;
 
+    @Value(path = "/config/zkconf/wawa_tww.conf", key = "scope")
+    private String scope;
+
 }
