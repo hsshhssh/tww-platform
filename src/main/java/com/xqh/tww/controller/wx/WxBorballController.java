@@ -27,7 +27,7 @@ import java.io.IOException;
  * Created by hssh on 2017/12/31.
  */
 @Api("微信相关Borball")
-@RequestMapping("/xqh/wawa/tww/wx")
+@RequestMapping("/xqh/wawa/tww/wx/borball")
 @RestController
 @Slf4j
 public class WxBorballController
@@ -46,7 +46,7 @@ public class WxBorballController
 
     @GetMapping("getOpenId")
     @ApiOperation("获取openId初始化接口")
-    public GetOpenIdInitVO getOpenIdInit(HttpServletRequest req, HttpServletResponse resp) throws IOException
+    public void getOpenIdInit(HttpServletRequest req, HttpServletResponse resp) throws IOException
     {
         log.info(" WxBorballController 获取openId初始化接口......");
         String redirectUrl = req.getParameter("url");
@@ -56,9 +56,9 @@ public class WxBorballController
         GetOpenIdInitVO vo = new GetOpenIdInitVO();
         vo.setUrl(url);
         log.info("WxBorballController 获取openId初始化接口 返回值 vo:{}", vo);
-        return vo;
+        //return vo;
 
-        //resp.sendRedirect(url);
+        resp.sendRedirect(url);
     }
 
     @GetMapping("getInfo")
