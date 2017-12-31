@@ -10,7 +10,6 @@ import com.xqh.tww.service.UserService;
 import com.xqh.tww.tkmybatis.entity.TwwUser;
 import com.xqh.tww.utils.common.DozerUtils;
 import com.xqh.tww.utils.config.CommonConfig;
-import com.xqh.tww.utils.wx.auth.WXOauth2;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -28,7 +27,7 @@ import java.io.IOException;
  * Created by hssh on 2017/12/31.
  */
 @Api("微信相关Borball")
-@RequestMapping("/xqh/wawa/tww/wx/")
+@RequestMapping("/xqh/wawa/tww/wx")
 @RestController
 @Slf4j
 public class WxBorballController
@@ -53,8 +52,7 @@ public class WxBorballController
         String redirectUrl = req.getParameter("url");
         log.info("redirectUrl:{}", redirectUrl);
 
-        //String url = openOAuth2s.authenticationUrl(redirectUrl, commonConfig.getScope().trim());
-        String url = WXOauth2.authorize(redirectUrl);
+        String url = openOAuth2s.authenticationUrl(redirectUrl, commonConfig.getScope().trim());
         GetOpenIdInitVO vo = new GetOpenIdInitVO();
         vo.setUrl(url);
         log.info("WxBorballController 获取openId初始化接口 返回值 vo:{}", vo);
