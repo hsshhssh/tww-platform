@@ -4,6 +4,7 @@ import com.xqh.tww.tkmybatis.entity.TwwUserAddress;
 import com.xqh.tww.tkmybatis.mapper.TwwUserAddressMapper;
 import com.xqh.tww.utils.common.ExampleBuilder;
 import com.xqh.tww.utils.common.Search;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
@@ -25,6 +26,7 @@ public class AddressService
         search.put("userId_eq", userId);
         Example example = new ExampleBuilder(TwwUserAddress.class).search(search).build();
         List<TwwUserAddress> userAddressList = addressMapper.selectByExample(example);
+        if(CollectionUtils.isEmpty(userAddressList)) return null;
         return userAddressList.get(0);
     }
 
