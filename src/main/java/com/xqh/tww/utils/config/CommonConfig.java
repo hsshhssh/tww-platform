@@ -20,6 +20,9 @@ public class CommonConfig
     @Value(path = "/config/zkconf/wawa_tww.conf", key = "appId")
     private String appId;
 
+    @Value(path = "/config/zkconf/wawa_tww.conf", key = "appSecret")
+    private String appSecret;
+
     @Value(path = "/config/zkconf/wawa_tww.conf", key = "key")
     private String key;
 
