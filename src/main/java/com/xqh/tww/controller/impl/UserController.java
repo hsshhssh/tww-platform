@@ -47,7 +47,7 @@ public class UserController implements IUserController
         TwwUserAddress twwUserAddress = addressService.selectByUserId(uid);
         if(null == twwUserAddress)
         {
-            return null;
+            return new TwwUserAddressVO();
         }
         else
         {
