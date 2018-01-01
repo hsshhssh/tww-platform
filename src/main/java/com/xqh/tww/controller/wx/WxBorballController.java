@@ -74,7 +74,7 @@ public class WxBorballController
         log.info("WxBorballController getInfo params:{}", params);
 
         String code = req.getParameter("code");
-        HttpResult httpResult = HttpUtils.get(String.format("https://api.weixin.qq.com/sns/oauth2/access_token?appid=%s&secret=%s&code=%s&grant_type=authorization_code"));
+        HttpResult httpResult = HttpUtils.get(String.format("https://api.weixin.qq.com/sns/oauth2/access_token?appid=%s&secret=%s&code=%s&grant_type=authorization_code", commonConfig.getAppId().trim(), commonConfig.getAppSecret().trim(), code));
         log.info("get access_tokenInfo result:{}", JSONObject.toJSON(httpResult));
         //AccessToken accessToken = openOAuth2s.getAccessToken("code");
         AccessToken accessToken = JSONObject.parseObject(httpResult.getContent(), AccessToken.class);
