@@ -12,7 +12,10 @@ import com.xqh.tww.utils.common.DozerUtils;
 import com.xqh.tww.utils.common.ErrorResponseEunm;
 import com.xqh.tww.utils.config.CommonConfig;
 import com.xqh.tww.utils.wx.WxShare;
-import com.xqh.tww.utils.wx.auth.*;
+import com.xqh.tww.utils.wx.auth.WXAuthorizationCode;
+import com.xqh.tww.utils.wx.auth.WXOauth2;
+import com.xqh.tww.utils.wx.auth.WXUserInfo;
+import com.xqh.tww.utils.wx.auth.WxQuartzBean;
 import com.xqh.tww.utils.wx.notify.XmlHelper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -29,6 +32,7 @@ import javax.validation.constraints.NotNull;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -208,7 +212,9 @@ public class WxController
             return null;
         }
         logger.info("wx share. ticket:{} dto:{}", ticket, dto);
-        return WxShare.jsSDK_Sign(dto.getShareUrl(), ticket, commonConfig.getAppId());
+        HashMap<String, String> result = WxShare.jsSDK_Sign(dto.getShareUrl(), ticket, commonConfig.getAppId());
+        logger.info("wx share result:{}", JSONObject.toJSON(result));
+        return result;
     }
 
 
