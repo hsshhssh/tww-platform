@@ -58,8 +58,12 @@ public class WxController
 
     @GetMapping("getOpenId")
     @ApiOperation("获取openId初始化接口")
-    public GetOpenIdInitVO getOpenIdInit(HttpServletRequest req, HttpServletResponse resp)
+    public GetOpenIdInitVO getOpenIdInit(HttpServletRequest req, HttpServletResponse resp) throws IOException
     {
+        if("1".equals(commonConfig.getGetInfoType().trim())) {
+            return wxBorballController.getOpenIdInit(req, resp);
+        }
+        
         logger.info("进入getOpenId.......");
 
         String redirectUrl = req.getParameter("url");
@@ -77,7 +81,7 @@ public class WxController
     public TwwUserVO getInfo(HttpServletRequest req, HttpServletResponse resp)
     {
 
-        if("1".equals(commonConfig.getGetInfoType())) {
+        if("1".equals(commonConfig.getGetInfoType().trim())) {
             return wxBorballController.getInfo(req, resp);
         }
 

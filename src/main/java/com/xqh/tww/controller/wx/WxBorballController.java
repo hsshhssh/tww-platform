@@ -51,7 +51,7 @@ public class WxBorballController
 
     @GetMapping("getOpenId")
     @ApiOperation("获取openId初始化接口")
-    public void getOpenIdInit(HttpServletRequest req, HttpServletResponse resp) throws IOException
+    public GetOpenIdInitVO getOpenIdInit(HttpServletRequest req, HttpServletResponse resp) throws IOException
     {
         log.info(" WxBorballController 获取openId初始化接口......");
         String redirectUrl = req.getParameter("url");
@@ -61,9 +61,9 @@ public class WxBorballController
         GetOpenIdInitVO vo = new GetOpenIdInitVO();
         vo.setUrl(url);
         log.info("WxBorballController 获取openId初始化接口 返回值 vo:{}", vo);
-        //return vo;
+        return vo;
 
-        resp.sendRedirect(url);
+        //resp.sendRedirect(url);
     }
 
     @GetMapping("getInfo")
