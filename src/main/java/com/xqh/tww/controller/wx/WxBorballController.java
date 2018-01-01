@@ -1,5 +1,6 @@
 package com.xqh.tww.controller.wx;
 
+import com.alibaba.fastjson.JSONObject;
 import com.riversoft.weixin.common.oauth2.AccessToken;
 import com.riversoft.weixin.common.oauth2.OpenUser;
 import com.riversoft.weixin.open.base.AppSetting;
@@ -8,7 +9,10 @@ import com.xqh.tww.entity.vo.GetOpenIdInitVO;
 import com.xqh.tww.entity.vo.TwwUserVO;
 import com.xqh.tww.service.UserService;
 import com.xqh.tww.tkmybatis.entity.TwwUser;
+import com.xqh.tww.utils.common.CommonUtils;
 import com.xqh.tww.utils.common.DozerUtils;
+import com.xqh.tww.utils.common.HttpResult;
+import com.xqh.tww.utils.common.HttpUtils;
 import com.xqh.tww.utils.config.CommonConfig;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -22,6 +26,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.TreeMap;
 
 /**
  * Created by hssh on 2017/12/31.
@@ -65,10 +70,14 @@ public class WxBorballController
     @ApiOperation("获取微信用户信息接口")
     public TwwUserVO getInfo(HttpServletRequest req, HttpServletResponse resp)
     {
+        TreeMap<String, String> params = CommonUtils.getParams(req);
+        log.info("WxBorballController getInfo params:{}", params);
 
         String code = req.getParameter("code");
-        log.info("WxBorballController 获取微信信息 code:{}", code);
-        AccessToken accessToken = openOAuth2s.getAccessToken("code");
+        HttpResult httpResult = HttpUtils.get(String.format("https://api.weixin.qq.com/sns/oauth2/access_token?appid=%s&secret=%s&code=%s&grant_type=authorization_code"));
+        log.info("get access_tokenInfo result:{}", JSONObject.toJSON(httpResult));
+        //AccessToken accessToken = openOAuth2s.getAccessToken("code");
+        AccessToken accessToken = JSONObject.parseObject(httpResult.getContent(), AccessToken.class);
         log.info("accessToken:{}", accessToken);
         OpenUser user = openOAuth2s.userInfo(accessToken.getAccessToken(), accessToken.getOpenId());
         log.info("OpenUser:{}", user);
