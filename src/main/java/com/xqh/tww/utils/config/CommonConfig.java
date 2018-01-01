@@ -35,4 +35,8 @@ public class CommonConfig
     @Value(path = "/config/zkconf/wawa_tww.conf", key = "scope")
     private String scope;
 
+    @Value(path = "/config/zkconf/wawa_tww.conf", key = "getInfoType")
+    private String getInfoType;
+
+
 }

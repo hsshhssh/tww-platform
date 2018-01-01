@@ -53,6 +53,8 @@ public class WxController
     private CommonConfig commonConfig;
     @Resource
     private PayService payService;
+    @Resource
+    private WxBorballController wxBorballController;
 
     @GetMapping("getOpenId")
     @ApiOperation("获取openId初始化接口")
@@ -74,6 +76,11 @@ public class WxController
     @ApiOperation("获取微信用户信息接口")
     public TwwUserVO getInfo(HttpServletRequest req, HttpServletResponse resp)
     {
+
+        if("1".equals(commonConfig.getGetInfoType())) {
+            return wxBorballController.getInfo(req, resp);
+        }
+
         TreeMap<String, String> params = CommonUtils.getParams(req);
         for (String s : params.keySet())
         {
