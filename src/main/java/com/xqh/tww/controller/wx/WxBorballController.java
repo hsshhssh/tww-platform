@@ -52,7 +52,7 @@ public class WxBorballController
         String redirectUrl = req.getParameter("url");
         log.info("redirectUrl:{}", redirectUrl);
 
-        String url = String.format("https://open.weixin.qq.com/connect/oauth2/authorize?appid=%s&redirect_uri=%s&response_type=code&scope=%s&state=STATE#wechat_redirect", commonConfig.getAppId().trim(), redirectUrl, "snsapi_base")
+        String url = String.format("https://open.weixin.qq.com/connect/oauth2/authorize?appid=%s&redirect_uri=%s&response_type=code&scope=%s&state=STATE#wechat_redirect", commonConfig.getAppId().trim(), redirectUrl, "snsapi_base");
         GetOpenIdInitVO vo = new GetOpenIdInitVO();
         vo.setUrl(url);
         log.info("WxBorballController 获取openId初始化接口 返回值 vo:{}", vo);
